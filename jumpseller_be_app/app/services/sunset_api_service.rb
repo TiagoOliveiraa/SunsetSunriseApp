@@ -4,23 +4,17 @@ class SunsetApiService
     include HTTParty
     base_uri 'https://api.sunrisesunset.io'
 
-    def initialize(location, date_start, date_end)
-        @options = {query: {lat: location[:lat], lng: location[:long], date_start: date_start, date_end: date_end, time_format: "24"}}
+    def initialize(lat, lng, date_start, date_end)
+        @options = { lat: lat.to_s, lng: lng.to_s, date_start: date_start, date_end: date_end, time_format: "24"}
     end
 
     def get_sun_data()
         begin
-            response = self.class.get("/json",@options)
+            response = self.class.get("/json",query: @options)
 
             case response.code
             when 200
-                finalResponse = {
-                    sunrise: response["results"][0]["sunrise"].present? ? response["results"][0]["sunrise"] : nil,
-                    sunset: response["results"][0]["sunset"].present? ? response["results"][0]["sunset"] : nil,
-                    golden_hour: response["results"][0]["golden_hour"].present? ? response["results"][0]["golden_hour"] : nil,
-                    timezone: response["results"][0]["timezone"]
-                }
-                { success: true, data: finalResponse }
+                { success: true, data: response }
             when 400
                 { success: false, error: "Invalid Location", status: 400 }
             when 404

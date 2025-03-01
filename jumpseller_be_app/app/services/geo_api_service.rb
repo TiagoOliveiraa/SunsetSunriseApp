@@ -4,8 +4,8 @@ class GeoApiService
     include HTTParty
     base_uri 'https://api.geoapify.com'
 
-    def initialize(location, api_key)
-        @options = {query: {text: location, format: "json", apiKey: api_key}}
+    def initialize(location)
+        @options = {query: {text: location, format: "json", apiKey: ENV['API_KEY']}}
     end
 
     def get_coords()

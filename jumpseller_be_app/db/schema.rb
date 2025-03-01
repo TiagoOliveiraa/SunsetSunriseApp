@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_15_113448) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_01_124513) do
+  create_table "location_coords", force: :cascade do |t|
+    t.string "name"
+    t.decimal "lat"
+    t.decimal "lng"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sun_times", force: :cascade do |t|
-    t.string "location"
     t.time "sunrise_time"
     t.time "sunset_time"
     t.time "golden_hour"
@@ -20,5 +27,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_15_113448) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "timezone"
+    t.decimal "lat", precision: 10, scale: 6
+    t.decimal "lng", precision: 10, scale: 6
+    t.index ["lat", "lng", "date"], name: "index_sun_times_on_lat_lng_date", unique: true
   end
 end
